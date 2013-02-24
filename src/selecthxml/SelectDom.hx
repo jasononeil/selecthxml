@@ -17,7 +17,7 @@ import selecthxml.engine.Parser;
 
 class SelectDom 
 {	
-	@:macro static public function select<T>(xml:ExprOf<TypedXml<T>>, selectionString:String)
+	macro static public function select<T>(xml:ExprOf<TypedXml<T>>, selectionString:String)
 	{
 		if (selectionString == null || selectionString.length == 0)
 			return Context.error("Selection string expected.", xml.pos);
