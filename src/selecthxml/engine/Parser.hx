@@ -53,7 +53,7 @@ class Parser {
 					part.universal = true;
 					failed = false;					
 				// tag selector (div)
-				case TAlpha(s):
+				case TAlpha(_):
 					pushToken(t);
 					part.tag = parseIdent();
 					failed = false;				
@@ -239,7 +239,7 @@ class Parser {
 						pushToken(t);
 						// :nth-child(2n+2)
 						return { a:a, b:parseInteger(true) };
-					case TInteger(v):
+					case TInteger(_):
 						pushToken(t);
 						// :nth-child(2n+2)
 						return { a:a, b:parseInteger(true) };							
