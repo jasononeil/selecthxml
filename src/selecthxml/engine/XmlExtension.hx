@@ -3,7 +3,7 @@ package selecthxml.engine;
 class XmlExtension 
 {
 	static public inline function getUpperCaseNodeName(xml:Xml)
-		return xml.nodeName.toUpperCase()
+		return xml.nodeName.toUpperCase();
 	
 	static public function getNextSibling(xml:Xml)
 	{

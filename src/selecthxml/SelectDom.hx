@@ -65,12 +65,12 @@ class SelectDom
 	#if macro
 	
 	static inline function isSingular(s:selecthxml.engine.Type.Selector):Bool
-		return s[s.length - 1].id != null
+		return s[s.length - 1].id != null;
 	
 	#else
 
 	static public function getXml<T:Xml>(result:TypedResult<T>):T
-		return untyped result.__x_m_l__
+		return untyped result.__x_m_l__;
 	
 	static public function runtimeSelect<T>(xml:TypedXml<T>, selectionString:String)
 	{
