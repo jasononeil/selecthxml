@@ -1,0 +1,13 @@
+{
+  "name": "selecthxml",
+  "license": "BSD",
+  "tags": ["cross","xml","utility"],
+  "description": "Allows type-safe CSS-style selection on Xml objects.",
+  "contributors": ["simn","jason"],
+  "releasenote": "Haxe 3 compatibility",
+  "version": "0.3.0",
+  "url": "https://github.com/Simn/selecthxml",
+  "dependencies": {
+    "tink_macros": ""
+  }
+}
