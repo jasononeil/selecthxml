@@ -7,6 +7,7 @@
   "releasenote": "Haxe 3 compatibility",
   "version": "0.3.0",
   "url": "https://github.com/Simn/selecthxml",
+  "classPath": "src/",
   "dependencies": {
     "tink_macro": ""
   }
