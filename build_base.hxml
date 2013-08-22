@@ -1,4 +1,5 @@
 -cp src
 -cp test
--cp ../tinkerbell/src
+-lib tink_macro
+-lib tink_core
 -main TestMain

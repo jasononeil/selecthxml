@@ -59,11 +59,11 @@ class TypeResolver
 		var docName = getName(docType);
 		
 		if (selector.length == 0)
-			return Failure("");
+			return Failure("Selector length is 0.");
 			
 		var last = selector[selector.length - 1];
 		if (last.tag == null)
-			return Failure("");
+			return Failure("Tag is null.");
 			
 		var matchTag = last.tag.toLowerCase();
 			
@@ -133,7 +133,7 @@ class TypeResolver
 		
 		if (existencePseudoMatches.length > 0)
 			return existencePseudoMatches.pop().asSuccess();
-		return Failure("");
+		return Failure("No match.");
 	}
 
 	static function defineType(docType:Type, baseField:ClassField)
@@ -192,7 +192,7 @@ class TypeResolver
 				
 		switch(field.type)
 		{
-			case TInst(t, p):
+			case TAbstract(t, p):
 				switch(t.toString())
 				{
 					case "Int":

@@ -31,9 +31,9 @@ class SelectDom
 			selectorExprs.push(s.toExpr());
 			
 		#if SELECTHXML_RUNTIME_PARSING
-		var ret = ["selecthxml", "SelectDom", "runtimeSelect"].drill(xml.pos).call([xml, selectionString.toExpr()], xml.pos);
+			var ret = ["selecthxml", "SelectDom", "runtimeSelect"].drill(xml.pos).call([xml, selectionString.toExpr()], xml.pos);
 		#else
-		var ret = ["selecthxml", "SelectDom", "applySelector"].drill(xml.pos).call([xml, selectorExprs.toArray()], xml.pos);
+			var ret = ["selecthxml", "SelectDom", "applySelector"].drill(xml.pos).call([xml, selectorExprs.toArray()], xml.pos);
 		#end
 		
 		if (isSingular(selector))
@@ -64,10 +64,10 @@ class SelectDom
 		
 	#if macro
 	
-	static inline function isSingular(s:selecthxml.engine.Type.Selector):Bool
-		return s[s.length - 1].id != null;
+		static inline function isSingular(s:selecthxml.engine.Type.Selector):Bool
+			return s[s.length - 1].id != null;
 	
-	#else
+	#end
 
 	static public function getXml<T:Xml>(result:TypedResult<T>):T
 		return untyped result.__x_m_l__;
@@ -104,7 +104,5 @@ class SelectDom
 			&& p.attrs.length == 0
 			&& p.pseudos.length == 0
 			&& p.combinator == null;
-	}	
-
-	#end
+	}
 }
