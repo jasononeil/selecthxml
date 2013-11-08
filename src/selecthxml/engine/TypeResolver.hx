@@ -5,13 +5,12 @@ import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.Type;
 
-import tink.core.types.Option;
-import tink.core.types.Outcome;
+import haxe.ds.Option;
 
 import selecthxml.engine.Type;
 
-using tink.core.types.Outcome;
-using tink.macro.tools.MacroTools;
+using tink.MacroApi;
+using tink.core.Outcome;
 
 #if macro
 
@@ -81,11 +80,11 @@ class TypeResolver
 		return switch(findField(fields, last))
 		{
 			case Failure(_):
-				"No match".asFailure();
+				Failure("No match");
 			case Success(field):
 				var tPath = defineType(docType, field);
 				typeCache.set(id, tPath);
-				return tPath.asSuccess();			
+				return Success(tPath);			
 		}
 	}
 	
@@ -115,7 +114,7 @@ class TypeResolver
 					{
 						case Exactly:
 							if (attr.value.toLowerCase() == pseudo.match)
-								return field.asSuccess();
+								return Success(field);
 						default:
 					}
 				}
@@ -127,12 +126,12 @@ class TypeResolver
 			for (matchName in matchNames)
 			{				
 				if (matchName == matchTag)
-					return field.asSuccess();
+					return Success(field);
 			}
 		}
 		
 		if (existencePseudoMatches.length > 0)
-			return existencePseudoMatches.pop().asSuccess();
+			return Success(existencePseudoMatches.pop());
 		return Failure("No match.");
 	}
 

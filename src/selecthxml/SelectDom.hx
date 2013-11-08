@@ -8,8 +8,8 @@ import haxe.macro.Expr;
 import selecthxml.engine.Lexer;
 import selecthxml.engine.TypeResolver;
 
-import tink.core.types.Option;
-using tink.macro.tools.MacroTools;
+import haxe.ds.Option;
+using tink.MacroApi;
 
 #end
 
