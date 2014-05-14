@@ -4,8 +4,8 @@
   "tags": ["cross","xml","utility","css","macro"],
   "description": "Allows type-safe CSS-style selection on Xml objects.",
   "contributors": ["simn","jason"],
-  "releasenote": "Updates for new tink_core",
-  "version": "0.5.0",
+  "releasenote": "Update for Haxe 3.2 (Handle null case)",
+  "version": "0.5.1",
   "url": "https://github.com/jasononeil/selecthxml",
   "classPath": "src/",
   "dependencies": {

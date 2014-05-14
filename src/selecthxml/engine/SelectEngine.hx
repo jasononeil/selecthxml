@@ -51,6 +51,7 @@ class SelectEngine {
 							if (matches(part, ctx))
 								break;
 						}
+					case null:
 				}
 				if (failed) 
 					break;
