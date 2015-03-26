@@ -14,10 +14,10 @@ using tink.core.Outcome;
 
 #if macro
 
-class TypeResolver 
+class TypeResolver
 {
 	static var typeCache:Hash<TypePath> = new Hash();
-	
+
 	static public function resolve<T>(xml:ExprOf<TypedXml<T>>, selector:Selector):Option<TypePath>
 	{
 		var docType = switch(getDocumentType(xml))
@@ -25,7 +25,7 @@ class TypeResolver
 			case Success(d): d;
 			case Failure(_): return None;
 		}
-		
+
 		var tPath = switch(matchFields(docType, selector))
 		{
 			case Success(f): f;
@@ -34,7 +34,7 @@ class TypeResolver
 
 		return Some(tPath);
 	}
-	
+
 	static function getDocumentType(xml:Expr)
 	{
 		switch(xml.typeof())
@@ -49,34 +49,34 @@ class TypeResolver
 				}
 			case Failure(_):
 		}
-		
+
 		return Failure("No type found.");
 	}
-	
+
 	static function matchFields(docType:Type, selector:Selector)
 	{
 		var docName = getName(docType);
-		
+
 		if (selector.length == 0)
 			return Failure("Selector length is 0.");
-			
+
 		var last = selector[selector.length - 1];
 		if (last.tag == null)
 			return Failure("Tag is null.");
-			
+
 		var matchTag = last.tag.toLowerCase();
-			
+
 		var id = docName + "." +matchTag;
-		
+
 		if (typeCache.exists(id))
 			return Success(typeCache.get(id));
-			
+
 		var fields = switch(docType.getFields())
 		{
 			case Success(f): f;
 			case Failure(_): return Failure("Type has no fields.");
 		}
-		
+
 		return switch(findField(fields, last))
 		{
 			case Failure(_):
@@ -84,14 +84,14 @@ class TypeResolver
 			case Success(field):
 				var tPath = defineType(docType, field);
 				typeCache.set(id, tPath);
-				return Success(tPath);			
+				return Success(tPath);
 		}
 	}
-	
+
 	static function findField(fields:Iterable<ClassField>, selectorPart:SelectorPart)
 	{
 		var matchTag = selectorPart.tag.toLowerCase();
-		
+
 		var existencePseudoMatches = [];
 		for (field in fields)
 		{
@@ -100,7 +100,7 @@ class TypeResolver
 			{
 				if (pseudo.elementName != matchTag)
 					continue;
-					
+
 				for (attr in selectorPart.attrs)
 				{
 					if (attr.name.toLowerCase() != pseudo.attributeName)
@@ -119,17 +119,17 @@ class TypeResolver
 					}
 				}
 			}
-		
+
 			var matchNames = getValueMeta(field);
 			matchNames.push(field.name.toLowerCase());
-			
+
 			for (matchName in matchNames)
-			{				
+			{
 				if (matchName == matchTag)
 					return Success(field);
 			}
 		}
-		
+
 		if (existencePseudoMatches.length > 0)
 			return Success(existencePseudoMatches.pop());
 		return Failure("No match.");
@@ -144,7 +144,7 @@ class TypeResolver
 			case Success(fields):
 				fields;
 		}
-		
+
 		var newFields = [];
 		for (field in fields)
 		{
@@ -159,7 +159,7 @@ class TypeResolver
 			newFields.push(makeField("set_" +field.name , FFun(setter), field.pos, [APrivate]));
 			newFields.push(makeField(field.name, FProp("get_" +field.name, "set_" +field.name, fieldCType), field.pos));
 		}
-		
+
 		var pack = ["selecthxml", "types", uncapitalize(getName(docType))];
 		var name = capitalize(baseField.name);
 		var tPath = {
@@ -179,16 +179,16 @@ class TypeResolver
 			kind: TDClass({name:"TypedResult", pack:["selecthxml"], params:[TPType("selecthxml.TypedXml".asComplexType([TPType(docType.toComplex())]))], sub:null}),
 			fields: newFields
 		});
-	
+
 		return tPath;
 	}
-	
+
 	static function makeGetter(field:ClassField)
 	{
 		var matchNames = getValueMeta(field);
 		var name = matchNames.length > 0 ? matchNames.pop() : field.name;
 		var value = "__x_m_l__".resolve().field("get").call([name.toExpr()]);
-				
+
 		switch(field.type)
 		{
 			case TAbstract(t, p):
@@ -211,7 +211,7 @@ class TypeResolver
 
 		return applyProcess(field, value, 0);
 	}
-	
+
 	static function makeSetter(field:ClassField)
 	{
 		var value = applyProcess(field, "value".resolve(), 1);
@@ -219,14 +219,14 @@ class TypeResolver
 		return ["__x_m_l__".resolve().field("set").call([field.name.toExpr(), value]),
 			field.name.resolve()].toBlock();
 	}
-	
+
 	static function applyProcess(field:ClassField, value:Expr, procIndex:Int)
 	{
 		if (!field.meta.has("process")) return value;
-		
+
 		var by = { };
 		Reflect.setField(by, "$value", value);
-		
+
 		var procMeta = field.meta.get().getValues("process");
 		for (pm in procMeta)
 		{
@@ -235,7 +235,7 @@ class TypeResolver
 		}
 		return value;
 	}
-	
+
 	static function makeField(name:String, kind:FieldType, pos, ?access)
 		return {
 			name: name,
@@ -245,7 +245,7 @@ class TypeResolver
 			meta: [],
 			kind: kind
 		}
-	
+
 	static function getName(t:Type)
 	{
 		switch(t)
@@ -254,11 +254,11 @@ class TypeResolver
 			default: return null;
 		}
 	}
-	
+
 	static function getValueMeta(field:ClassField)
 	{
 		if (!field.meta.has("value")) return [];
-		
+
 		var metas = [];
 		for (v in field.meta.get().getValues("value"))
 		{
@@ -278,11 +278,11 @@ class TypeResolver
 		}
 		return metas;
 	}
-	
+
 	static function getPseudoMeta(field:ClassField)
 	{
 		if (!field.meta.has("pseudo")) return [];
-		
+
 		var pseudos:Array<Pseudo> = [];
 		for (v in field.meta.get().getValues("pseudo"))
 		{
@@ -291,16 +291,14 @@ class TypeResolver
 				Context.warning("Invalid number of arguments to @pseudo, expected (String, String, ?String)", field.pos);
 				continue;
 			}
-			
-			var pseudoData = Lambda.map(v, function(e)
-				return switch(e.getName())
-				{
-					case Success(s): s.toLowerCase();
-					case Failure(_):
-						Context.warning("Arguments to @pseudo must be String.", field.pos);
-						continue;
-				});
-				
+
+			var pseudoData = [for(e in v) switch e.getName() {
+				case Success(s): s.toLowerCase();
+				case Failure(_):
+					Context.warning("Arguments to @pseudo must be String.", field.pos);
+					continue;
+			}];
+
 			var pseudo = {
 				elementName: pseudoData.pop(),
 				attributeName: pseudoData.pop(),
@@ -310,11 +308,11 @@ class TypeResolver
 		}
 		return pseudos;
 	}
-	
+
 	static function capitalize(s:String)
 		return s.charAt(0).toUpperCase() + s.substr(1);
 	static function uncapitalize(s:String)
-		return s.charAt(0).toLowerCase() + s.substr(1);		
+		return s.charAt(0).toLowerCase() + s.substr(1);
 }
 
 #end
