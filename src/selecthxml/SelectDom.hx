@@ -74,7 +74,7 @@ class SelectDom
 	
 	static public function runtimeSelect<T>(xml:TypedXml<T>, selectionString:String)
 	{
-		#if flash8
+		#if (flash8 || SELECTHXML_NO_REGEX_PARSING)
 		var lexer = new selecthxml.engine.Lexer(new haxe.io.StringInput(selectionString));
 		#else
 		var lexer = new selecthxml.engine.RegexLexer(selectionString);
