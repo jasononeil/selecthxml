@@ -1,0 +1,50 @@
+language: haxe
+
+sudo: false
+addons:
+  apt:
+    packages:
+      - php5-cli
+
+matrix:
+  include:
+    - haxe: "3.1.3"
+      install:
+        - yes | haxelib install hxcpp
+        - yes | haxelib install tink_core
+        - yes | haxelib install tink_macro
+        - yes | haxelib install nodejs
+        - haxelib list
+
+    - haxe: development
+      install:
+        # install and rebuild hxcpp
+        - haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp.git
+        - cd $(haxelib path hxcpp | head -1)tools/hxcpp && haxe compile.hxml
+        - cd $(haxelib path hxcpp | head -1)project && neko build.n linux-m64
+        - cd $TRAVIS_BUILD_DIR
+
+        - yes | haxelib install tink_core
+        - yes | haxelib install tink_macro
+        - yes | haxelib install nodejs
+
+        - haxelib list
+  allow_failures:
+    - haxe: development
+
+script:
+  - haxelib dev selecthxml $TRAVIS_BUILD_DIR
+  - haxe build.hxml
+
+  - haxe build_base.hxml --interp
+  - neko bin/neko.n
+  - php bin/php/index.php
+  - node bin/js.js
+  - ./bin/cpp/TestMain
+
+  # -D SELECTHXML_RUNTIME_PARSING
+  - haxe build_base.hxml -D SELECTHXML_RUNTIME_PARSING --interp
+  - neko bin/neko_runtime.n
+  - php bin/php_runtime/index.php
+  - node bin/js_runtime.js
+  - ./bin/cpp_runtime/TestMain

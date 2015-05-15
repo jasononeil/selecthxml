@@ -16,6 +16,7 @@ build_base.hxml
 
 --next
 build_base.hxml
+-lib nodejs
 -js bin/js.js
 
 --next
@@ -46,6 +47,7 @@ build_base.hxml
 --next
 build_base.hxml
 -D SELECTHXML_RUNTIME_PARSING
+-lib nodejs
 -js bin/js_runtime.js
 
 --next

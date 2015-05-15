@@ -9,7 +9,11 @@ class TestMain
 		var runner = new TestRunner();
 		runner.add(new TestBasic());
 		runner.add(new TestTyped());
-		runner.run();
+		var success = runner.run();
+
+		#if (sys || nodejs)
+		Sys.exit(success ? 0 : 1);
+		#end
 		#end
 	}
 }
